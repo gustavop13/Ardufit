@@ -17,9 +17,9 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   serial = new p5.SerialPort();
-  serial.list();
+  //serial.list();
   serial.open(portName);
-  serial.on('list', gotList);
+  //serial.on('list', gotList);
   serial.on('data', gotData);
   angleMode(DEGREES);
   textSize(30);

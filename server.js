@@ -4,8 +4,9 @@ var serialserver = require('./p5.serialserver.js');
 //console.log("p5.serialserver is running");
 
 var express = require('express');
-var app = express();
+var session = require('client-sessions');
 const bodyParser = require('body-parser');
+var app = express();
 
 var mysql = require('mysql');
 
@@ -21,17 +22,45 @@ con.connect(function(err) {
   console.log("Connected!");
 });
 
+app.use(session({
+  cookieName: 'session',
+  secret: '0GBlJZ9EKBt2Zbi2flRPvztczCewBxXK',
+  username: '',
+}));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
-app.set('view engine', 'ejs')
+app.set('view engine', 'ejs');
+
+app.post('/', function(req, res) {
+  req.session.username = req.body.message;
+  var name = req.session.username;
+  if(name != 'something') {
+    res.render('index', {name: req.session.username});
+  } else {
+    res.render('index');
+  }
+});
 
 app.get('/', function (req, res) {
-  res.render('index')
-})
+  var name = req.session.username;
+  if(name != '') {
+    res.render('index', {name: req.session.username});
+  } else {
+    res.render('index');
+  }
+});
 
-app.post('/', function (req, res) {
-  res.render('index');
-  console.log(req.body.message);
-})
+app.get('/about', function(req, res) {
+  res.render('about');
+});
+
+app.get('/sketch', function(req, res) {
+  res.render('sketch');
+});
+
+app.get('/logout', function(req, res) {
+  req.session.reset();
+});
 
 app.listen(3000)

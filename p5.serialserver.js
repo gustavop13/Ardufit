@@ -7,7 +7,7 @@ var LOGGING = false;
 
 var wss = null;
 var serialPort = null;
-var serialPortName = "";
+var serialPortName = "/dev/cu.HC-05-DevB";
 var clients = [];
 
 var logit = function(mess) {
