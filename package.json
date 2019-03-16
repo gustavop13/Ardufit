@@ -1,0 +1,27 @@
+{
+  "name": "ardufit",
+  "version": "1.0.0",
+  "description": "fitness web service",
+  "main": "server.js",
+  "dependencies": {
+    "client-sessions": "^0.8.0",
+    "connect": "^3.6.6",
+    "isomorphic-ws": "^4.0.1",
+    "ws": "^6.1.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gustavop13/Ardufit.git"
+  },
+  "author": "Gustavo Placencia Carranza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gustavop13/Ardufit/issues"
+  },
+  "homepage": "https://github.com/gustavop13/Ardufit#readme"
+}
