@@ -34,21 +34,11 @@ app.set('view engine', 'ejs');
 
 app.post('/', function(req, res) {
   req.session.username = req.body.message;
-  var name = req.session.username;
-  if(name != 'something') {
-    res.render('index', {name: req.session.username});
-  } else {
-    res.render('index');
-  }
+  res.render('index', {name: req.session.username});
 });
 
 app.get('/', function (req, res) {
-  var name = req.session.username;
-  if(name != '') {
-    res.render('index', {name: req.session.username});
-  } else {
-    res.render('index');
-  }
+  res.render('index', {name: req.session.username});
 });
 
 app.get('/about', function(req, res) {
@@ -61,6 +51,7 @@ app.get('/sketch', function(req, res) {
 
 app.get('/logout', function(req, res) {
   req.session.reset();
+  res.render('index', {name: req.session.username});
 });
 
 app.listen(3000)
