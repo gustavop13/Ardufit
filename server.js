@@ -18,27 +18,37 @@ var con = mysql.createConnection({
 });
 
 con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
+  if(err) {
+    console.log(err.code);
+    console.log(err.fatal);
+  }
 });
 
 app.use(session({
   cookieName: 'session',
   secret: '0GBlJZ9EKBt2Zbi2flRPvztczCewBxXK',
   username: '',
+  duration: 1 * 60 * 60 * 1000,
+  activeDuration: 1 * 20 * 60 * 1000,
+  cookie: {
+    ephemeral: true,
+  }
 }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
-app.post('/', function(req, res) {
-  req.session.username = req.body.message;
-  res.render('index', {name: req.session.username});
+app.get('/', function (req, res) {
+  res.render('index', {name: null});
 });
 
-app.get('/', function (req, res) {
-  res.render('index', {name: req.session.username});
+app.post('/dashboard', function (req, res) {
+  req.session.username = req.body.message;
+  var query = "SELECT points FROM users WHERE user_name='" + req.session.username + "';";
+  con.query(query, function(err, results, fields) {
+    res.render('dashboard', {name: req.session.username, points: "" + results[0].points});
+  });
 });
 
 app.get('/about', function(req, res) {
@@ -49,9 +59,17 @@ app.get('/sketch', function(req, res) {
   res.render('sketch');
 });
 
+app.get('/signup', function(req, res) {
+  res.render('signup');
+});
+
+app.get('/login', function(req, res) {
+  res.render('login');
+});
+
 app.get('/logout', function(req, res) {
   req.session.reset();
   res.render('index', {name: req.session.username});
 });
 
-app.listen(3000)
+app.listen(3000);
