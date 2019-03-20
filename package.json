@@ -4,9 +4,13 @@
   "description": "fitness web service",
   "main": "server.js",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "client-sessions": "^0.8.0",
     "connect": "^3.6.6",
+    "express": "^4.16.4",
     "isomorphic-ws": "^4.0.1",
+    "mysql": "^2.16.0",
+    "p5.serialserver": "0.0.25",
     "ws": "^6.1.4"
   },
   "devDependencies": {},

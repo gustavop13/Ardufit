@@ -41,14 +41,8 @@ app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
   res.render('index', {name: null});
-});
-
-app.post('/dashboard', function (req, res) {
-  req.session.username = req.body.message;
-  var query = "SELECT points FROM users WHERE user_name='" + req.session.username + "';";
-  con.query(query, function(err, results, fields) {
-    res.render('dashboard', {name: req.session.username, points: "" + results[0].points});
-  });
+  var d = new Date();
+  //console.log("Rendered at: " + d);
 });
 
 app.get('/about', function(req, res) {
@@ -65,6 +59,16 @@ app.get('/signup', function(req, res) {
 
 app.get('/login', function(req, res) {
   res.render('login');
+});
+
+app.post('/signup', function(req, res) {
+  console.log(req.body.username);
+  console.log(req.body.password);
+});
+
+app.post('/login', function(req, res) {
+  //var query = "INSERT INTO users (user_name, password, points) VALUES (req.body.username)"
+  console.log(req.body.username);
 });
 
 app.get('/logout', function(req, res) {

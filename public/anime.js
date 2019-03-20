@@ -1,5 +1,5 @@
 var current = null;
-document.querySelector('#email').addEventListener('focus', function(e) {
+document.querySelector('#username').addEventListener('focus', function(e) {
   if (current) current.pause();
   current = anime({
     targets: 'path',
