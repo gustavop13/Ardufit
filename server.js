@@ -27,11 +27,12 @@ con.connect(function(err) {
 app.use(session({
   cookieName: 'session',
   secret: '0GBlJZ9EKBt2Zbi2flRPvztczCewBxXK',
-  username: '',
+  username: null,
   duration: 1 * 60 * 60 * 1000,
   activeDuration: 1 * 20 * 60 * 1000,
   cookie: {
     ephemeral: true,
+    points: 0,
   }
 }));
 
@@ -40,9 +41,7 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
-  res.render('index', {name: null});
-  var d = new Date();
-  //console.log("Rendered at: " + d);
+  res.render('index', {name: session.username});
 });
 
 app.get('/about', function(req, res) {
@@ -61,19 +60,50 @@ app.get('/login', function(req, res) {
   res.render('login');
 });
 
+app.get('/dashboard', function(req, res) {
+  var query = "SELECT points FROM users WHERE user_name='" + session.username + "';";
+  con.query(query, function (err, result) {
+    if(err) throw err;
+    res.render('dashboard', {name: session.username, points: "" + result[0].points});
+  });
+});
+
 app.post('/signup', function(req, res) {
-  console.log(req.body.username);
-  console.log(req.body.password);
+  var query = "SELECT 1 FROM users WHERE user_name = '" + req.body.username + "';";
+  //res.send(query);
+  con.query(query, function (err, result) {
+    if (err) throw err;
+    if(!result[0]) {
+      query = "INSERT INTO users(user_name, password, points) VALUES ('" + req.body.username + "', '" + req.body.password + "', 0);";
+      con.query(query, function (err, result) {
+      });
+      query = "SELECT user_name, points FROM users WHERE user_name = '" + req.body.username + "';";
+      con.query(query, function (err, result) {
+        session.username = result[0].user_name;
+        res.render('dashboard', {name: session.username, points: "" + result[0].points});
+      });
+    } else {
+      res.send("Username taken.");
+    }
+  });
 });
 
 app.post('/login', function(req, res) {
-  //var query = "INSERT INTO users (user_name, password, points) VALUES (req.body.username)"
-  console.log(req.body.username);
+  var query = "SELECT user_name, password, points FROM users WHERE user_name = '" + req.body.username + "' AND password = '" + req.body.password + "';";
+  con.query(query, function (err, result) {
+    if (err) throw err;
+    if(result[0]) {
+      session.username = result[0].user_name;
+      res.render('dashboard', {name: session.username, points: "" + result[0].points});
+    } else {
+      res.send("Incorrect Username or Password")
+    }
+  });
 });
 
 app.get('/logout', function(req, res) {
   req.session.reset();
-  res.render('index', {name: req.session.username});
+  res.render('index', {name: null});
 });
 
 app.listen(3000);
