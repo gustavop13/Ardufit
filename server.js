@@ -41,11 +41,16 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
-  res.render('index', {name: session.username});
+
+  var query = "SELECT user_name, points FROM users ORDER BY points LIMIT 20";
+  con.query(query, function (err, result) {
+    if(err) throw err;
+    res.render('index', {name: session.username, leaderboard: result});
+  });
 });
 
 app.get('/about', function(req, res) {
-  res.render('about');
+  res.render('about', {name: session.username});
 });
 
 app.get('/sketch', function(req, res) {
@@ -103,7 +108,12 @@ app.post('/login', function(req, res) {
 
 app.get('/logout', function(req, res) {
   req.session.reset();
-  res.render('index', {name: null});
+  session.username = null;
+  var query = "SELECT user_name, points FROM users ORDER BY points LIMIT 20";
+  con.query(query, function (err, result) {
+    if(err) throw err;
+    res.render('index', {name: null, leaderboard: result});
+  });
 });
 
 app.listen(3000);

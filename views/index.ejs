@@ -24,7 +24,19 @@
     <iframe width="420" height="315"src="https://www.youtube.com/embed/3MtJFKxYf0k">
     </iframe>
     <div class="content">
-      <p>Leaderboard in progress.</p>
     </div>
+    <table align="center">
+      <tr>
+        <th>Rank</th>
+        <th>Username</th>
+        <th>Points</th>
+      </tr>
+      <% var rank = 1; %>
+      <% leaderboard.forEach(function(user) {%>
+        <tr>
+          <td><%= rank %></th><td><%= user.user_name %></td><td><%= user.points %><% rank++ %></td>
+        </tr>
+      <% }); %>
+    </table>
   </body>
 </html>
