@@ -3,11 +3,11 @@ var serialserver = require('./p5.serialserver.js');
 //serialserver.start();
 //console.log("p5.serialserver is running");
 
-var express = require('express');
-var session = require('client-sessions');
+const
+app = require('express')(),
+session = require('client-sessions');
 const bodyParser = require('body-parser');
-var app = express();
-
+const express = require('express');
 var mysql = require('mysql');
 
 var con = mysql.createConnection({
@@ -24,10 +24,13 @@ con.connect(function(err) {
   }
 });
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.set('view engine', 'ejs');
+
+
 app.use(session({
-  cookieName: 'session',
   secret: '0GBlJZ9EKBt2Zbi2flRPvztczCewBxXK',
-  username: null,
   duration: 1 * 60 * 60 * 1000,
   activeDuration: 1 * 20 * 60 * 1000,
   cookie: {
@@ -36,16 +39,15 @@ app.use(session({
   }
 }));
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
-app.set('view engine', 'ejs');
-
 app.get('/', function (req, res) {
-
-  var query = "SELECT user_name, points FROM users ORDER BY points LIMIT 20";
+  var query = "SELECT user_name, points FROM users ORDER BY points DESC LIMIT 20";
   con.query(query, function (err, result) {
     if(err) throw err;
-    res.render('index', {name: session.username, leaderboard: result});
+    if (req.session_state.username) {
+      res.render('index', {name: req.session_state.username, leaderboard: result});
+    } else {
+      res.render('index', {name: null, leaderboard: result})
+    }
   });
 });
 
@@ -54,7 +56,7 @@ app.get('/about', function(req, res) {
 });
 
 app.get('/sketch', function(req, res) {
-  res.render('sketch');
+  res.render('sketch', {name: session.username});
 });
 
 app.get('/signup', function(req, res) {
@@ -66,16 +68,15 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/dashboard', function(req, res) {
-  var query = "SELECT points FROM users WHERE user_name='" + session.username + "';";
+  var query = "SELECT points FROM users WHERE user_name='" + req.session_state.username + "';";
   con.query(query, function (err, result) {
     if(err) throw err;
-    res.render('dashboard', {name: session.username, points: "" + result[0].points});
+    res.render('dashboard', {name: req.session_state.username, points: "" + result[0].points});
   });
 });
 
 app.post('/signup', function(req, res) {
   var query = "SELECT 1 FROM users WHERE user_name = '" + req.body.username + "';";
-  //res.send(query);
   con.query(query, function (err, result) {
     if (err) throw err;
     if(!result[0]) {
@@ -84,8 +85,8 @@ app.post('/signup', function(req, res) {
       });
       query = "SELECT user_name, points FROM users WHERE user_name = '" + req.body.username + "';";
       con.query(query, function (err, result) {
-        session.username = result[0].user_name;
-        res.render('dashboard', {name: session.username, points: "" + result[0].points});
+        req.session_state.username = result[0].user_name;
+        res.redirect('/dashboard');
       });
     } else {
       res.send("Username taken.");
@@ -98,8 +99,8 @@ app.post('/login', function(req, res) {
   con.query(query, function (err, result) {
     if (err) throw err;
     if(result[0]) {
-      session.username = result[0].user_name;
-      res.render('dashboard', {name: session.username, points: "" + result[0].points});
+      req.session_state.username = result[0].user_name;
+      res.redirect('/dashboard');
     } else {
       res.send("Incorrect Username or Password")
     }
@@ -107,13 +108,8 @@ app.post('/login', function(req, res) {
 });
 
 app.get('/logout', function(req, res) {
-  req.session.reset();
-  session.username = null;
-  var query = "SELECT user_name, points FROM users ORDER BY points LIMIT 20";
-  con.query(query, function (err, result) {
-    if(err) throw err;
-    res.render('index', {name: null, leaderboard: result});
-  });
+  req.session_state.reset();
+  res.redirect('/');
 });
 
 app.listen(3000);

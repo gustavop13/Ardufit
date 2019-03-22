@@ -12,6 +12,17 @@
     <a href="/">
       <img src="ardufit_logo.png" alt="Italian Trulli" width="50%">
     </a>
+    <div class="topnav">
+      <a href="sketch">Sketch</a>
+      <a href="about">About</a>
+      <% if(name) { %>
+        <a href="dashboard">Dashboard</a>
+        <a href="logout">Logout</a>
+      <% } else { %>
+        <a href="signup">Sign Up</a>
+        <a href="login">Login</a>
+      <% } %>
+    </div>
     <script language="javascript" type="text/javascript" src="sketch.js"></script>
   </body>
 </html>
