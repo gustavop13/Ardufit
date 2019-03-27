@@ -75,7 +75,7 @@
    *
    */
   p5.prototype.select = function(e, p) {
-    p5._validateParameters('select', arguments);
+    //p5._validateParameters('select', arguments);
     var res = null;
     var container = getContainer(p);
     if (e[0] === '.') {
@@ -572,7 +572,7 @@
    * </code></div>
    */
   p5.prototype.createButton = function(label, value) {
-    p5._validateParameters('createButton', arguments);
+    //p5._validateParameters('createButton', arguments);
     var elt = document.createElement('button');
     elt.innerHTML = label;
     if (value) elt.value = value;
@@ -1380,7 +1380,7 @@
    * </code></div>
    */
   p5.prototype.createElement = function(tag, content) {
-    p5._validateParameters('createElement', arguments);
+    //p5._validateParameters('createElement', arguments);
     var elt = document.createElement(tag);
     if (typeof content !== 'undefined') {
       elt.innerHTML = content;

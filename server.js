@@ -52,11 +52,11 @@ app.get('/', function (req, res) {
 });
 
 app.get('/about', function(req, res) {
-  res.render('about', {name: session.username});
+  res.render('about', {name: req.session_state.username});
 });
 
 app.get('/sketch', function(req, res) {
-  res.render('sketch', {name: session.username});
+  res.render('sketch', {name: req.session_state.username});
 });
 
 app.get('/signup', function(req, res) {
@@ -106,6 +106,13 @@ app.post('/login', function(req, res) {
     }
   });
 });
+
+app.post('/sketch', function(req, res) {
+  var query = "UPDATE users SET points = points + " + req.body.points + " WHERE user_name = '" + req.session_state.username + "';";
+  con.query(query, function (err, result) {
+    res.redirect('/dashboard')
+  });
+})
 
 app.get('/logout', function(req, res) {
   req.session_state.reset();

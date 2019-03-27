@@ -2,9 +2,10 @@
 // Adapted from p5.js Serial library
 
 var serial;
-var portName = "/dev/cu.HC-05-DevB";
+var portName = "/dev/cu.usbmodem142101";//"/dev/cu.HC-05-DevB";
 var textXpos = 10;
 let img;
+let tracker;
 
 var a = 0;
 var c = 0;
@@ -15,7 +16,8 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  let canvas = createCanvas(600, 600);
+  tracker = select('#points');
   serial = new p5.SerialPort();
   //serial.list();
   serial.open(portName);
@@ -24,7 +26,6 @@ function setup() {
   angleMode(DEGREES);
   textSize(30);
 }
-
 
 // Got the list of ports
 function gotList(thelist) {
@@ -47,11 +48,11 @@ function gotData() {
 function draw() {
   background(220);
   fill(0);
-  text(c, 50, 50);
 	translate(width/2, height/2);
 	rotate(a);
 	imageMode(CENTER);
 	image(img, 0, 0);
+  tracker.elt.value=c;
 	if(a > -10) {
 		fill(0, 255, 0);
     if(n) {

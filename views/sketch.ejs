@@ -7,6 +7,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
     <script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
 	  <script language="javascript" type="text/javascript" src="libraries/p5.serialport.js"></script>
+    <script language="javascript" type="text/javascript" src="libraries/p5.dom.js"></script>
   </head>
   <body style="background-color:mediumturquoise;">
     <a href="/">
@@ -17,12 +18,15 @@
       <a href="about">About</a>
       <% if(name) { %>
         <a href="dashboard">Dashboard</a>
-        <a href="logout">Logout</a>
+        <a href="logout" style="float:right">Logout</a>
       <% } else { %>
-        <a href="signup">Sign Up</a>
-        <a href="login">Login</a>
+        <a href="signup" style="float:right">Sign Up</a>
+        <a href="login" style="float:right">Login</a>
       <% } %>
     </div>
+    <form action="/sketch" method="post">
+      <input type="submit" name="points" id="points">
+    </form>
     <script language="javascript" type="text/javascript" src="sketch.js"></script>
   </body>
 </html>

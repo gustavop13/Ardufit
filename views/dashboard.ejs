@@ -13,13 +13,16 @@
     <div class="topnav">
       <a href="sketch">Sketch</a>
       <a href="about">About</a>
-      <a href="logout">Logout</a>
+      <a href="dashboard">Dashboard</a>
+      <a href="logout" style="float:right">Logout</a>
     </div>
-    <% if (name) { %>
-      <h3>Welcome, <%= name %></h3>
-    <% } %>
-    <% if (points) { %>
-      <h3>You have <%= points %> points.</h3>
-    <% } %>
+    <div class="content">
+      <% if (name) { %>
+        <h3>Welcome, <%= name %></h3>
+      <% } %>
+      <% if (points) { %>
+        <h3>You have <%= points %> points.</h3>
+      <% } %>
+    </div>
   </body>
 </html>
