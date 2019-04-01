@@ -68,10 +68,15 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/dashboard', function(req, res) {
+  var total = 0;
   var query = "SELECT points FROM users WHERE user_name='" + req.session_state.username + "';";
   con.query(query, function (err, result) {
+    total = result[0].points;
+  });
+  query = "SELECT SUM(points) AS points, date FROM entries WHERE user_name='" + req.session_state.username + "' GROUP BY date ORDER BY date LIMIT 7;";
+  con.query(query, function (err, result) {
     if(err) throw err;
-    res.render('dashboard', {name: req.session_state.username, points: "" + result[0].points});
+    res.render('dashboard', {name: req.session_state.username, points: total, entries: result});
   });
 });
 
@@ -110,9 +115,13 @@ app.post('/login', function(req, res) {
 app.post('/sketch', function(req, res) {
   var query = "UPDATE users SET points = points + " + req.body.points + " WHERE user_name = '" + req.session_state.username + "';";
   con.query(query, function (err, result) {
-    res.redirect('/dashboard')
   });
-})
+  var d = new Date().toISOString().slice(0, 10).replace('T', ' ');
+  query = "INSERT INTO entries VALUES ('" + req.session_state.username + "', " + req.body.points + ", '" + d + "');";
+  con.query(query, function (err, result) {
+    res.redirect('/dashboard');
+  });
+});
 
 app.get('/logout', function(req, res) {
   req.session_state.reset();
