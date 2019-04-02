@@ -3,9 +3,8 @@ var serialserver = require('./p5.serialserver.js');
 //serialserver.start();
 //console.log("p5.serialserver is running");
 
-const
-app = require('express')(),
-session = require('client-sessions');
+const app = require('express')();
+const session = require('client-sessions');
 const bodyParser = require('body-parser');
 const express = require('express');
 var mysql = require('mysql');
