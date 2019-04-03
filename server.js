@@ -79,6 +79,10 @@ app.get('/dashboard', function(req, res) {
   });
 });
 
+app.get('/activity', function(req, res) {
+  res.render('activity', {name: req.session_state.username});
+});
+
 app.post('/signup', function(req, res) {
   var query = "SELECT 1 FROM users WHERE user_name = '" + req.body.username + "';";
   con.query(query, function (err, result) {
