@@ -72,7 +72,7 @@ app.get('/dashboard', function(req, res) {
   con.query(query, function (err, result) {
     total = result[0].points;
   });
-  query = "SELECT SUM(points) AS points, date FROM entries WHERE user_name='" + req.session_state.username + "' GROUP BY date ORDER BY date LIMIT 7;";
+  query = "SELECT SUM(points) AS points, date FROM entries WHERE user_name='" + req.session_state.username + "' GROUP BY date ORDER BY date DESC LIMIT 7;";
   con.query(query, function (err, result) {
     if(err) throw err;
     res.render('dashboard', {name: req.session_state.username, points: total, entries: result});

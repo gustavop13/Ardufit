@@ -37,9 +37,11 @@
     for (var e of entries) {
       date_array.push(e.date.slice(5, 10).replace('-', '/'));
     }
+    date_array.reverse();
     for (var e of entries) {
       point_array.push(e.points);
     }
+    point_array.reverse();
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
