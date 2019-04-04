@@ -43,11 +43,11 @@
     }
     point_array.reverse();
     var myChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: date_array,
             datasets: [{
-                label: 'Points',
+                label: 'Number of Lifts',
                 data: point_array,
                 backgroundColor: [
                     'rgba(221,221,221,0.2)'
@@ -59,6 +59,10 @@
             }]
         },
         options: {
+            title: {
+                display: true,
+                text: "Lifts per day"
+          }
             scales: {
                 yAxes: [{
                     ticks: {
