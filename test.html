@@ -7,41 +7,14 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
   </head>
   <body style="background-color:mediumturquoise;">
-    <a href="/">
-      <img src="ardufit_logo.png" alt="Italian Trulli" width="50%">
-    </a>
-    <div class="topnav">
-      <a href="sketch">Sketch</a>
-      <a href="about">About</a>
-      <a href="dashboard">Dashboard</a>
-      <a href="logout" style="float:right">Logout</a>
-    </div>
-    <div class="content">
-      <% if (name) { %>
-        <h3>Welcome, <%= name %></h3>
-      <% } %>
-      <% if (points) { %>
-        <h3 id="points">You have <%= points %> points.</h3>
-      <% } %>
-    </div>
     <div  style="position: relative; height:40vh; width:70vw;">
       <canvas id="myChart" style="background-color: DarkGray"></canvas>
     </div>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.2/Chart.min.js"></script>
     <script>
     var ctx = document.getElementById('myChart');
-    var points = <%= points %>;
-    var entries = <%- JSON.stringify(entries) %>;
-    var date_array = [];
-    var point_array = [];
-    for (var e of entries) {
-      date_array.push(e.date.slice(5, 10).replace('-', '/'));
-    }
-    date_array.reverse();
-    for (var e of entries) {
-      point_array.push(e.points);
-    }
-    point_array.reverse();
+    var date_array = ["03/26", "03/27", "03/28"];
+    var point_array = [25, 34, 43];
     var myChart = new Chart(ctx, {
         type: 'line',
         data: {
