@@ -13,7 +13,11 @@ iframe {
 .content {
   background-color:#1b1e24;
   padding: 14px 16px;
-  margin: 25px;
+  margin: 0px;
+}
+
+canvas {
+  background-color: #1b1e24;
 }
 
 /* Navigator */

@@ -17,6 +17,9 @@ function preload() {
 
 function setup() {
   let canvas = createCanvas(600, 600);
+  canvas.style('display', 'block');
+  canvas.style('margin-left', 'auto');
+  canvas.style('margin-right', 'auto');
   tracker = select('#points');
   serial = new p5.SerialPort();
   //serial.list();
