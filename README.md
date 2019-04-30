@@ -1,2 +1,2 @@
 # Ardufit
-All files currently used for ardufit site
+Web project using arduino to provide a resistance-centered fitness tracking service.
